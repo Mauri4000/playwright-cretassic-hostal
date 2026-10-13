@@ -1,0 +1,97 @@
+name: Cretassic Hostal — BDD E2E Tests
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Nightly at 02:30 UTC (22:30 Bolivia) — offset from bastille to avoid overlap
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  # ─── Smoke Tests ─────────────────────────────────────────────────────────────
+  smoke:
+    name: "🔥 Smoke Tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Run smoke tests
+        run: npm run test:smoke
+        env:
+          BASE_URL:      ${{ secrets.TEST_BASE_URL }}
+          ADMIN_URL:     ${{ secrets.TEST_ADMIN_URL }}
+          TEST_EMAIL:    ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          HEADLESS:      "true"
+
+      - name: Generate Allure report
+        if: always()
+        run: npx allure generate reports/allure-results --clean -o reports/allure-report
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-smoke-${{ github.run_number }}
+          path: reports/allure-report/
+          retention-days: 14
+
+  # ─── E2E Tests (runs only if smoke passes) ───────────────────────────────────
+  e2e:
+    name: "🧪 E2E Tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: smoke
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Run E2E tests (with retry on flaky)
+        run: npm run test:e2e
+        env:
+          BASE_URL:      ${{ secrets.TEST_BASE_URL }}
+          ADMIN_URL:     ${{ secrets.TEST_ADMIN_URL }}
+          TEST_EMAIL:    ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          HEADLESS:      "true"
+
+      - name: Generate Allure report
+        if: always()
+        run: npx allure generate reports/allure-results --clean -o reports/allure-report
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-e2e-${{ github.run_number }}
+          path: reports/allure-report/
+          retention-days: 30

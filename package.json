@@ -1,0 +1,25 @@
+{
+  "name": "playwright-cretassic-hostal",
+  "version": "1.0.0",
+  "description": "Professional BDD E2E framework — Cretassic Hostal",
+  "private": true,
+  "scripts": {
+    "pretest":         "node -e \"const fs=require('fs'); fs.rmSync('reports/allure-results',{recursive:true,force:true}); fs.mkdirSync('reports/allure-results',{recursive:true}); fs.writeFileSync('reports/allure-results/allure.properties','allure.report.name=CRETASSIC HOSTAL REPORT\\n');\"",
+    "test":            "cucumber-js",
+    "test:smoke":      "cucumber-js --profile smoke",
+    "test:e2e":        "cucumber-js --profile e2e",
+    "test:regression": "cucumber-js --profile regression",
+    "test:cleanup":    "cucumber-js --profile cleanup",
+    "report":          "allure generate reports/allure-results --clean -o reports/allure-report && allure open reports/allure-report"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber":    "^11.0.0",
+    "@types/node":           "^20.0.0",
+    "allure-cucumberjs":     "^3.0.0",
+    "allure-commandline":    "^2.30.0",
+    "dotenv":                "^16.4.5",
+    "playwright":            "^1.48.0",
+    "ts-node":               "^10.9.2",
+    "typescript":            "^5.4.0"
+  }
+}

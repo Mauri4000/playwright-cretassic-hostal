@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@core/*":      ["src/core/*"],
+      "@pages/*":     ["src/pages/*"],
+      "@builders/*":  ["src/builders/*"],
+      "@factories/*": ["src/factories/*"],
+      "@utils/*":     ["src/utils/*"]
+    },
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "tests/**/*", "hooks/**/*"],
+  "exclude": ["node_modules", "dist", "reports"]
+}

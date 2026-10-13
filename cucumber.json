@@ -1,0 +1,79 @@
+{
+  "default": {
+    "requireModule": ["ts-node/register"],
+    "require":       ["hooks/**/*.ts", "tests/steps/**/*.ts"],
+    "paths":         ["tests/features/**/*.feature"],
+    "format": [
+      "summary",
+      "html:reports/cucumber-report.html",
+      "allure-cucumberjs/reporter"
+    ],
+    "formatOptions": {
+      "resultsDir": "reports/allure-results"
+    },
+    "retry":    1,
+    "parallel": 1
+  },
+  "smoke": {
+    "requireModule": ["ts-node/register"],
+    "require":       ["hooks/**/*.ts", "tests/steps/**/*.ts"],
+    "paths":         ["tests/features/**/*.feature"],
+    "tags":          "@smoke",
+    "format": [
+      "summary",
+      "html:reports/cucumber-report.html",
+      "allure-cucumberjs/reporter"
+    ],
+    "formatOptions": {
+      "resultsDir": "reports/allure-results"
+    },
+    "retry":    1,
+    "parallel": 1
+  },
+  "e2e": {
+    "requireModule": ["ts-node/register"],
+    "require":       ["hooks/**/*.ts", "tests/steps/**/*.ts"],
+    "paths":         ["tests/features/**/*.feature"],
+    "tags":          "@e2e",
+    "format": [
+      "summary",
+      "html:reports/cucumber-report.html",
+      "allure-cucumberjs/reporter"
+    ],
+    "formatOptions": {
+      "resultsDir": "reports/allure-results"
+    },
+    "retry":    1,
+    "parallel": 1
+  },
+  "regression": {
+    "requireModule": ["ts-node/register"],
+    "require":       ["hooks/**/*.ts", "tests/steps/**/*.ts"],
+    "paths":         ["tests/features/**/*.feature"],
+    "tags":          "@smoke or @e2e",
+    "format": [
+      "summary",
+      "html:reports/cucumber-report.html",
+      "allure-cucumberjs/reporter"
+    ],
+    "formatOptions": {
+      "resultsDir": "reports/allure-results"
+    },
+    "retry":    1,
+    "parallel": 1
+  },
+  "cleanup": {
+    "requireModule": ["ts-node/register"],
+    "require":       ["hooks/**/*.ts", "tests/steps/**/*.ts"],
+    "paths":         ["tests/features/**/*.feature"],
+    "tags":          "@cleanup",
+    "format": [
+      "summary",
+      "allure-cucumberjs/reporter"
+    ],
+    "formatOptions": {
+      "resultsDir": "reports/allure-results"
+    },
+    "parallel": 1
+  }
+}
