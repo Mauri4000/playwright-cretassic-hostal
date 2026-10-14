@@ -84,7 +84,9 @@ jobs:
 
       - name: Generate email report
         if: always()
-        run: node scripts/generate-email.js || true
+        run: |
+          node scripts/generate-email.js || \
+          echo "<h2>No test report generated — check Actions logs for run #${{ github.run_number }}</h2>" > reports/email-body.html
 
       - name: Send email report
         if: always()
